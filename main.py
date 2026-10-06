@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """
 故障注入测试床 - 主入口
 
@@ -21,6 +21,10 @@ import argparse
 import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# 控制台编码兼容：非 UTF-8 代码页（如 CI 的英文 Windows）下中文输出不再抛 UnicodeEncodeError
+from agent.console import enable_utf8_stdout
+enable_utf8_stdout()
 
 from agent.task_agent import TaskAgent
 from fault_injector.injector import FaultInjector

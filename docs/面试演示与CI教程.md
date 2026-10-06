@@ -188,9 +188,45 @@ Actions → 选 OrbitGuard CI workflow → 右上 **⋯ → Create status badge*
 ### 如果红了怎么办
 
 1. 点进失败 job → 展开 "Run test suites" 步骤 → 找 FAIL 行与报错
-2. **本地复现**：`python tests\<对应文件>.py`
+2. **本地复现**（关键：复现 CI 的环境，不是只复现命令）：
+   ```powershell
+   $env:PYTHONIOENCODING='cp1252'   # 模拟英文 Windows runner 的代码页
+   python tests\test_five_module.py
+   ```
 3. 修完 `git commit -am "..."` + `git push`，CI 自动重跑
-4. 常见坑提前说：Windows runner 下测试全过（已在本机 windows 实测 149/149）；若 ubuntu 上有平台差异，通常是路径/编码类小问题
+
+### 实战案例：windows 矩阵全红、ubuntu 全绿（已修复，可作为面试案例讲）
+
+**故障现象**：CI 4 矩阵里 ubuntu 两个全绿，windows 两个全红，报 `Process completed with exit code 1`。
+
+**定位思路**：先看平台差异模式——"同一份代码、Linux 绿 Windows 红" 通常不是逻辑 bug，而是**环境差异**（编码 / 路径 / 行尾 / 大小写敏感）。再看 Python 版本差异（CI 跑 3.10/3.12，本地 3.13）。
+
+**根因**：GitHub Actions 的 `windows-latest` runner 默认代码页是 **cp1252**，而项目大量输出中文。
+Python 向非 UTF-8 标准输出打印中文会抛异常：
+
+```
+UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-8
+  File "tests/test_five_module.py", line 115, in run_all_tests
+    print("五模块全链路编排器 - 集成测试")
+```
+
+本地中文 Windows 是 GBK 代码页、中文能编码，所以**本地全过**；Ubuntu 是 UTF-8 locale，所以**Linux 全绿**。
+
+**修复（两层）**：
+1. 代码层：新增 `agent/console.py`，在 13 个入口（8 个测试套件 + 4 个 CLI + 覆盖率脚本）调用
+   `enable_utf8_stdout()`——输出被重定向（CI/管道）时强制 UTF-8 且 `errors="replace"` 兜底；
+   输出是本地终端时保留原编码（中文不乱码），仅降级不可编码字符。
+2. 流水线层：workflow 加 `env: PYTHONUTF8: "1" / PYTHONIOENCODING: utf-8`，从进程启动就 UTF-8。
+
+**验证**：用 `PYTHONIOENCODING=cp1252` 复现 CI 条件跑全套 → **149/149 通过**；benchmark 在该条件下
+exit code 0。同时把 action 升到 Node24 原生主版本（checkout@v5 / setup-python@v6 / upload-artifact@v6）
+消除 Node 20 弃用告警。
+
+**面试怎么讲这个案例**（体现的是排障方法论，不是"我改了个编码"）：
+> "我的 CI 出现过 Linux 全绿、Windows 全红。我没有直接改代码，而是先按'同一份代码、平台相关'的假设
+> 列出环境差异，再用本地模拟代码页的方式复现出根因——Windows runner 是 cp1252，打印中文抛
+> UnicodeEncodeError。修复分两层：代码层做编码兼容（重定向走 UTF-8、终端保留原编码避免乱码），
+> 流水线层用 PYTHONUTF8 从进程启动就统一 UTF-8。修完在模拟条件下跑通 149 项测试才推送。"
 
 ---
 

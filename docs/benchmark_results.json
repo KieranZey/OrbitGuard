@@ -111,7 +111,7 @@
     },
     "spike": {
       "completion_rate": 100.0,
-      "false_positive_rate": 33.3,
+      "false_positive_rate": 0.0,
       "note": "噪声下Agent正常完成率 + 无故障时的误报率"
     },
     "packet_loss": {
@@ -122,19 +122,19 @@
   },
   "performance": {
     "agent_execution_ms": {
-      "mean": 502.3,
-      "max": 503.5,
-      "min": 501.5
+      "mean": 502.1,
+      "max": 502.3,
+      "min": 501.7
     },
     "rsm_dtm_processing_ms": {
-      "mean": 0.4,
-      "max": 0.7
-    },
-    "gateway_decision_ms": {
-      "mean": 0.1,
+      "mean": 0.2,
       "max": 0.2
     },
-    "total_overhead_ms": 0.5,
+    "gateway_decision_ms": {
+      "mean": 0.0,
+      "max": 0.1
+    },
+    "total_overhead_ms": 0.2,
     "trials": 5
   }
 }

@@ -18,12 +18,12 @@
 """
 import json
 import os
-import sys
 from typing import Dict, List, Any, Tuple
 from fault_injector.injector import (
     EXECUTION_FAULTS, CREDIBILITY_FAULTS,
     TERMINAL_FAULTS, NON_TERMINAL_FAULTS,
 )
+from agent.console import enable_utf8_stdout
 
 
 # 故障空间维度定义
@@ -252,11 +252,8 @@ def generate_text_report(report: Dict[str, Any]) -> str:
 
 def main():
     """生成覆盖率报告并输出到文件和控制台。"""
-    # Windows 控制台默认 GBK，强制 UTF-8 输出避免 ✓ 等符号编码失败
-    try:
-        sys.stdout.reconfigure(encoding="utf-8")
-    except Exception:
-        pass
+    # 控制台编码兼容：非 UTF-8 代码页（CI 的英文 Windows）下中文与 ✓ 符号不再抛异常
+    enable_utf8_stdout()
     report = calculate_coverage()
 
     # 输出文本报告

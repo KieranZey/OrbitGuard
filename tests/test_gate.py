@@ -16,6 +16,10 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# 控制台编码兼容：非 UTF-8 代码页（如 CI 的英文 Windows）下中文输出不再抛 UnicodeEncodeError
+from agent.console import enable_utf8_stdout
+enable_utf8_stdout()
+
 from rsm.monitor import RuntimeStabilityMonitor
 from dtm.monitor import DecisionTrustMonitor
 from gateway.gateway import DecisionGateway
