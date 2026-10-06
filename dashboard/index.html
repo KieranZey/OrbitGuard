@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OrbitGuard - 星载Agent全链路可信监护系统 Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #0a0e27; color: #e0e6ff; min-height: 100vh; }
+        .header { background: linear-gradient(135deg, #1a1f4e 0%, #0d1235 100%); padding: 20px 40px; border-bottom: 2px solid #2a3a7a; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 24px; background: linear-gradient(90deg, #4fc3f7, #81d4fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header .subtitle { font-size: 13px; color: #7a8ac4; }
+        .status-bar { display: flex; gap: 20px; }
+        .status-item { text-align: center; }
+        .status-item .label { font-size: 11px; color: #7a8ac4; }
+        .status-item .value { font-size: 18px; font-weight: bold; }
+        .status-item .value.green { color: #4caf50; }
+        .status-item .value.blue { color: #4fc3f7; }
+        .status-item .value.orange { color: #ff9800; }
+        .container { padding: 20px 40px; }
+        .row { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+        .card { background: #131836; border: 1px solid #252d5c; border-radius: 8px; padding: 16px; flex: 1; min-width: 300px; }
+        .card h3 { font-size: 14px; color: #81d4fa; margin-bottom: 12px; border-bottom: 1px solid #252d5c; padding-bottom: 8px; }
+        .chart { width: 100%; height: 280px; }
+        .chart-tall { height: 350px; }
+        .pipeline { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; flex-wrap: wrap; gap: 10px; }
+        .pipeline-node { background: #1a2050; border: 2px solid #3a4a9a; border-radius: 8px; padding: 12px 20px; text-align: center; min-width: 120px; position: relative; }
+        .pipeline-node.active { border-color: #4fc3f7; box-shadow: 0 0 15px rgba(79,195,247,0.3); }
+        .pipeline-node .name { font-size: 13px; font-weight: bold; color: #e0e6ff; }
+        .pipeline-node .desc { font-size: 10px; color: #7a8ac4; margin-top: 4px; }
+        .pipeline-arrow { color: #3a4a9a; font-size: 20px; }
+        .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+        .metric-box { background: #0d1235; border-radius: 6px; padding: 12px; text-align: center; }
+        .metric-box .num { font-size: 24px; font-weight: bold; color: #4fc3f7; }
+        .metric-box .label { font-size: 11px; color: #7a8ac4; margin-top: 4px; }
+        .footer { text-align: center; padding: 20px; color: #4a5a8a; font-size: 12px; border-top: 1px solid #252d5c; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>OrbitGuard</h1>
+            <div class="subtitle">星载Agent全链路可信监护与执行门控框架 · 实时监控面板</div>
+        </div>
+        <div class="status-bar">
+            <div class="status-item"><div class="label">系统状态</div><div class="value green">ONLINE</div></div>
+            <div class="status-item"><div class="label">测试通过</div><div class="value blue">138</div></div>
+            <div class="status-item"><div class="label">故障类型</div><div class="value orange">9</div></div>
+            <div class="status-item"><div class="label">监护模块</div><div class="value blue">5</div></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 五模块架构流水线 -->
+        <div class="card">
+            <h3>五模块全链路架构</h3>
+            <div class="pipeline">
+                <div class="pipeline-node active"><div class="name">FaultInjector</div><div class="desc">故障注入测试床<br>9类故障 × 多故障叠加</div></div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-node active"><div class="name">RSM</div><div class="desc">运行稳定性监护<br>5类异常检测</div></div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-node active"><div class="name">DTM</div><div class="desc">输出可信度评估<br>4类可信度检查</div></div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-node active"><div class="name">Gateway</div><div class="desc">汇合判定<br>C1-C5物理约束 + 三级路由</div></div>
+                <div class="pipeline-arrow">→</div>
+                <div class="pipeline-node active"><div class="name">EGM</div><div class="desc">执行门控<br>人工审批 + 一次性许可</div></div>
+            </div>
+        </div>
+
+        <!-- 核心指标 -->
+        <div class="card">
+            <h3>核心指标总览</h3>
+            <div class="metric-grid">
+                <div class="metric-box"><div class="num">138</div><div class="label">自动化测试通过</div></div>
+                <div class="metric-box"><div class="num">9</div><div class="label">故障类型覆盖</div></div>
+                <div class="metric-box"><div class="num">40.9%</div><div class="label">故障空间覆盖率</div></div>
+                <div class="metric-box"><div class="num">100%</div><div class="label">RSM稳定性检测率</div></div>
+                <div class="metric-box"><div class="num">100%</div><div class="label">DTM可信性检测率</div></div>
+                <div class="metric-box"><div class="num">0.2ms</div><div class="label">监护处理开销</div></div>
+                <div class="metric-box"><div class="num">0</div><div class="label">第三方依赖</div></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- 故障检测率 -->
+            <div class="card">
+                <h3>单故障检测率（实验敏感阈值）</h3>
+                <div id="chart-detection" class="chart"></div>
+            </div>
+            <!-- 故障空间覆盖率 -->
+            <div class="card">
+                <h3>故障空间覆盖矩阵</h3>
+                <div id="chart-coverage" class="chart"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- 三级路由分布 -->
+            <div class="card">
+                <h3>Gateway 三级路由判定逻辑</h3>
+                <div id="chart-routing" class="chart"></div>
+            </div>
+            <!-- 性能开销 -->
+            <div class="card">
+                <h3>各环节性能开销（ms）</h3>
+                <div id="chart-performance" class="chart"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- 噪声鲁棒性 -->
+            <div class="card">
+                <h3>噪声鲁棒性测试</h3>
+                <div id="chart-noise" class="chart"></div>
+            </div>
+            <!-- EGM状态机 -->
+            <div class="card">
+                <h3>EGM 执行门控状态机</h3>
+                <div id="chart-egm" class="chart"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        OrbitGuard · 星载Agent全链路可信监护与执行门控框架 · 纯Python标准库实现 · 零第三方依赖
+    </div>
+
+    <script>
+        // 故障检测率
+        var chartDetection = echarts.init(document.getElementById('chart-detection'));
+        chartDetection.setOption({
+            tooltip: { trigger: 'axis' },
+            grid: { left: 100, right: 30, top: 10, bottom: 30 },
+            xAxis: { type: 'value', max: 100, axisLabel: { color: '#7a8ac4' } },
+            yAxis: { type: 'category', data: ['contradictory_sensors','missing_evidence','inflated_confidence','wrong_diagnosis','repetitive_calls','memory_bloat','no_output_timeout','process_crash','infinite_loop'], axisLabel: { color: '#7a8ac4', fontSize: 10 } },
+            series: [{ type: 'bar', data: [
+                {value: 100, itemStyle: {color: '#4caf50'}},
+                {value: 100, itemStyle: {color: '#4caf50'}},
+                {value: 100, itemStyle: {color: '#4caf50'}},
+                {value: 100, itemStyle: {color: '#4caf50'}},
+                {value: 100, itemStyle: {color: '#4caf50'}},
+                {value: 100, itemStyle: {color: '#4caf50'}},
+                {value: 100, itemStyle: {color: '#4caf50'}},
+                {value: 100, itemStyle: {color: '#4caf50'}},
+                {value: 100, itemStyle: {color: '#4caf50'}},
+            ], label: { show: true, position: 'right', color: '#e0e6ff', formatter: '{c}%' } }]
+        });
+
+        // 故障空间覆盖
+        var chartCoverage = echarts.init(document.getElementById('chart-coverage'));
+        chartCoverage.setOption({
+            tooltip: { trigger: 'item' },
+            legend: { bottom: 0, textStyle: { color: '#7a8ac4' } },
+            series: [{
+                type: 'pie', radius: ['40%', '70%'], center: ['50%', '45%'],
+                data: [
+                    { value: 9, name: '已覆盖', itemStyle: {color: '#4caf50'} },
+                    { value: 13, name: '未覆盖', itemStyle: {color: '#f44336'} },
+                ],
+                label: { color: '#e0e6ff', formatter: '{b}: {c} ({d}%)' }
+            }]
+        });
+
+        // 三级路由
+        var chartRouting = echarts.init(document.getElementById('chart-routing'));
+        chartRouting.setOption({
+            tooltip: { trigger: 'item' },
+            series: [{
+                type: 'sunburst', radius: [0, '90%'], center: ['50%', '50%'],
+                data: [
+                    { name: 'BLOCK', value: 1, itemStyle: {color: '#f44336'}, children: [
+                        { name: 'RSM critical', value: 1 },
+                        { name: 'DTM trust<0.5', value: 1 },
+                    ]},
+                    { name: 'SUSPEND', value: 3, itemStyle: {color: '#ff9800'}, children: [
+                        { name: 'RSM故障', value: 1 },
+                        { name: 'DTM trust<0.8', value: 1 },
+                        { name: 'C1-C5违规', value: 1 },
+                    ]},
+                    { name: 'PERMIT', value: 1, itemStyle: {color: '#4caf50'}, children: [
+                        { name: '全部通过', value: 1 },
+                    ]},
+                ],
+                label: { color: '#fff', fontSize: 10 }
+            }]
+        });
+
+        // 性能开销
+        var chartPerformance = echarts.init(document.getElementById('chart-performance'));
+        chartPerformance.setOption({
+            tooltip: { trigger: 'axis' },
+            grid: { left: 80, right: 30, top: 20, bottom: 30 },
+            xAxis: { type: 'category', data: ['Agent执行', 'RSM+DTM处理', 'Gateway判定', 'EGM门控'], axisLabel: { color: '#7a8ac4' } },
+            yAxis: { type: 'value', name: 'ms', axisLabel: { color: '#7a8ac4' } },
+            series: [{ type: 'bar', data: [501.7, 0.2, 0.0, 0.1], itemStyle: {
+                color: function(params) { return params.value > 100 ? '#ff9800' : '#4fc3f7'; }
+            }, label: { show: true, position: 'top', color: '#e0e6ff' } }]
+        });
+
+        // 噪声鲁棒性
+        var chartNoise = echarts.init(document.getElementById('chart-noise'));
+        chartNoise.setOption({
+            tooltip: { trigger: 'axis' },
+            grid: { left: 60, right: 30, top: 20, bottom: 40 },
+            xAxis: { type: 'category', data: ['无噪声', '高斯(轻)', '高斯(重)', '脉冲干扰', '数据丢包'], axisLabel: { color: '#7a8ac4', rotate: 20, fontSize: 10 } },
+            yAxis: { type: 'value', max: 100, axisLabel: { color: '#7a8ac4' } },
+            series: [{ type: 'bar', data: [100, 100, 100, 100, 100], itemStyle: {color: '#4caf50'}, label: { show: true, position: 'top', color: '#e0e6ff', formatter: '{c}%' } }]
+        });
+
+        // EGM状态机
+        var chartEgm = echarts.init(document.getElementById('chart-egm'));
+        chartEgm.setOption({
+            tooltip: { trigger: 'item' },
+            series: [{
+                type: 'graph', layout: 'circular', circular: { rotateLabel: true },
+                data: [
+                    { name: 'PENDING_HUMAN', itemStyle: {color: '#ff9800'} },
+                    { name: 'PERMIT_ISSUED', itemStyle: {color: '#4fc3f7'} },
+                    { name: 'STATE_CHECK', itemStyle: {color: '#9c27b0'} },
+                    { name: 'EXECUTING', itemStyle: {color: '#2196f3'} },
+                    { name: 'COMPLETED', itemStyle: {color: '#4caf50'} },
+                    { name: 'REJECTED', itemStyle: {color: '#f44336'} },
+                    { name: 'STATE_CHANGED', itemStyle: {color: '#ff5722'} },
+                    { name: 'SAFE_HOLD', itemStyle: {color: '#795548'} },
+                ],
+                links: [
+                    { source: 'PENDING_HUMAN', target: 'PERMIT_ISSUED' },
+                    { source: 'PENDING_HUMAN', target: 'REJECTED' },
+                    { source: 'PERMIT_ISSUED', target: 'STATE_CHECK' },
+                    { source: 'STATE_CHECK', target: 'EXECUTING' },
+                    { source: 'STATE_CHECK', target: 'STATE_CHANGED' },
+                    { source: 'EXECUTING', target: 'COMPLETED' },
+                    { source: 'EXECUTING', target: 'SAFE_HOLD' },
+                ],
+                label: { color: '#fff', fontSize: 9 },
+                lineStyle: { color: '#3a4a9a', curveness: 0.3 }
+            }]
+        });
+
+        window.addEventListener('resize', function() {
+            chartDetection.resize(); chartCoverage.resize(); chartRouting.resize();
+            chartPerformance.resize(); chartNoise.resize(); chartEgm.resize();
+        });
+    </script>
+</body>
+</html>

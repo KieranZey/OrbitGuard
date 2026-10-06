@@ -1,0 +1,140 @@
+{
+  "single_fault": {
+    "infinite_loop": {
+      "expected_module": "RSM",
+      "trials": 5,
+      "detected": 5,
+      "detection_rate": 100.0
+    },
+    "process_crash": {
+      "expected_module": "RSM",
+      "trials": 5,
+      "detected": 5,
+      "detection_rate": 100.0
+    },
+    "no_output_timeout": {
+      "expected_module": "RSM",
+      "trials": 5,
+      "detected": 5,
+      "detection_rate": 100.0
+    },
+    "memory_bloat": {
+      "expected_module": "RSM",
+      "trials": 5,
+      "detected": 5,
+      "detection_rate": 100.0
+    },
+    "repetitive_calls": {
+      "expected_module": "RSM",
+      "trials": 5,
+      "detected": 5,
+      "detection_rate": 100.0
+    },
+    "wrong_diagnosis": {
+      "expected_module": "DTM",
+      "trials": 5,
+      "detected": 5,
+      "detection_rate": 100.0
+    },
+    "inflated_confidence": {
+      "expected_module": "DTM",
+      "trials": 5,
+      "detected": 5,
+      "detection_rate": 100.0
+    },
+    "missing_evidence": {
+      "expected_module": "DTM",
+      "trials": 5,
+      "detected": 5,
+      "detection_rate": 100.0
+    },
+    "contradictory_sensors": {
+      "expected_module": "DTM",
+      "trials": 5,
+      "detected": 5,
+      "detection_rate": 100.0
+    }
+  },
+  "composite_fault": {
+    "wrong_diagnosis+inflated_confidence": {
+      "faults": [
+        "wrong_diagnosis",
+        "inflated_confidence"
+      ],
+      "detection_rate": 100.0,
+      "per_fault_detection": {
+        "wrong_diagnosis": 100.0,
+        "inflated_confidence": 100.0
+      },
+      "note": "逐故障匹配：所有注入故障都被对应检测器检出才算成功"
+    },
+    "memory_bloat+wrong_diagnosis": {
+      "faults": [
+        "memory_bloat",
+        "wrong_diagnosis"
+      ],
+      "detection_rate": 100.0,
+      "per_fault_detection": {
+        "memory_bloat": 100.0,
+        "wrong_diagnosis": 100.0
+      },
+      "note": "逐故障匹配：所有注入故障都被对应检测器检出才算成功"
+    },
+    "missing_evidence+contradictory_sensors": {
+      "faults": [
+        "missing_evidence",
+        "contradictory_sensors"
+      ],
+      "detection_rate": 100.0,
+      "per_fault_detection": {
+        "missing_evidence": 100.0,
+        "contradictory_sensors": 100.0
+      },
+      "note": "逐故障匹配：所有注入故障都被对应检测器检出才算成功"
+    }
+  },
+  "noise_robustness": {
+    "none": {
+      "completion_rate": 100.0,
+      "false_positive_rate": 0.0,
+      "note": "噪声下Agent正常完成率 + 无故障时的误报率"
+    },
+    "gaussian_light": {
+      "completion_rate": 100.0,
+      "false_positive_rate": 0.0,
+      "note": "噪声下Agent正常完成率 + 无故障时的误报率"
+    },
+    "gaussian_heavy": {
+      "completion_rate": 100.0,
+      "false_positive_rate": 100.0,
+      "note": "噪声下Agent正常完成率 + 无故障时的误报率"
+    },
+    "spike": {
+      "completion_rate": 100.0,
+      "false_positive_rate": 33.3,
+      "note": "噪声下Agent正常完成率 + 无故障时的误报率"
+    },
+    "packet_loss": {
+      "completion_rate": 100.0,
+      "false_positive_rate": 0.0,
+      "note": "噪声下Agent正常完成率 + 无故障时的误报率"
+    }
+  },
+  "performance": {
+    "agent_execution_ms": {
+      "mean": 501.7,
+      "max": 501.8,
+      "min": 501.5
+    },
+    "rsm_dtm_processing_ms": {
+      "mean": 0.2,
+      "max": 0.2
+    },
+    "gateway_decision_ms": {
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "total_overhead_ms": 0.2,
+    "trials": 5
+  }
+}

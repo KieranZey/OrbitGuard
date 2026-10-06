@@ -1,0 +1,37 @@
+======================================================================
+OrbitGuard 量化实验报告
+======================================================================
+
+【实验1：单故障检测率】
+  故障名                       期望模块          检测率
+  ---------------------------------------------
+  infinite_loop             RSM        100.0%
+  process_crash             RSM        100.0%
+  no_output_timeout         RSM        100.0%
+  memory_bloat              RSM        100.0%
+  repetitive_calls          RSM        100.0%
+  wrong_diagnosis           DTM        100.0%
+  inflated_confidence       DTM        100.0%
+  missing_evidence          DTM        100.0%
+  contradictory_sensors     DTM        100.0%
+  平均检测率                                100.0%
+
+【实验2：复合故障检测率（逐故障匹配）】
+  wrong_diagnosis+inflated_confidence: 全检出率 100.0%  (逐故障: wrong_diagnosis=100.0%, inflated_confidence=100.0%)
+  memory_bloat+wrong_diagnosis: 全检出率 100.0%  (逐故障: memory_bloat=100.0%, wrong_diagnosis=100.0%)
+  missing_evidence+contradictory_sensors: 全检出率 100.0%  (逐故障: missing_evidence=100.0%, contradictory_sensors=100.0%)
+
+【实验3：噪声鲁棒性】
+  none                 完成率: 100.0%  误报率: 0.0%
+  gaussian_light       完成率: 100.0%  误报率: 0.0%
+  gaussian_heavy       完成率: 100.0%  误报率: 100.0%
+  spike                完成率: 100.0%  误报率: 33.3%
+  packet_loss          完成率: 100.0%  误报率: 0.0%
+
+【实验4：性能开销】
+  Agent执行:     均值 501.7ms (最大 501.8ms)
+  RSM+DTM处理:  均值 0.2ms
+  Gateway判定:   均值 0.0ms
+  监护总开销:    0.2ms
+
+======================================================================

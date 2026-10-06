@@ -1,0 +1,108 @@
+{
+  "_comment": "故障注入配置文件。enabled设为true则激活对应故障，false为正常模式。",
+  "agent": {
+    "task_id": "TASK-DEMO-001",
+    "sat_id": "SAT-001",
+    "agent_id": "SAT-001-AGENT",
+    "task_type": "diagnosis",
+    "mission_phase": "NOMINAL",
+    "telemetry_interval_ms": 1000,
+    "heartbeat_interval_ms": 5000,
+    "resource_interval_ms": 1000,
+    "max_tool_calls": 8,
+    "decision_timeout_ms": 30000,
+    "telemetry_noise": {
+      "_comment": "真实遥测噪声模型（阶段一1.2）。4种模式可独立开关，模拟在轨传感器噪声",
+      "enabled": false,
+      "gaussian": {"enabled": true, "sigma_scale": 0.05, "_comment": "高斯噪声：传感器精度限制，sigma=基准值×sigma_scale"},
+      "drift": {"enabled": false, "drift_rate_per_sec": 0.0005, "_comment": "随机漂移：传感器老化，值随时间缓慢偏移"},
+      "spike": {"enabled": false, "probability": 0.02, "magnitude_scale": 3.0, "_comment": "脉冲干扰：辐射瞬态，随机时刻出现瞬时尖峰"},
+      "packet_loss": {"enabled": false, "probability": 0.01, "_comment": "数据丢包：通信中断，整帧数据丢失，发布packet_loss事件"}
+    }
+  },
+  "fault_injector": {
+    "global_enabled": true,
+    "stability_faults": {
+      "infinite_loop": {
+        "enabled": false,
+        "_comment": "死循环/活锁：在独立线程中死循环，主线程继续发心跳，模拟进程存活但任务无进展",
+        "target": "tool_execution",
+        "trigger_step": 2
+      },
+      "process_crash": {
+        "enabled": false,
+        "_comment": "进程崩溃：在指定步骤直接raise未捕获异常或调用os._exit，模拟运行中崩溃",
+        "target": "diagnosis",
+        "trigger_step": 1,
+        "mode": "exception"
+      },
+      "no_output_timeout": {
+        "enabled": false,
+        "_comment": "无输出/超时：在指定位置sleep超长时间，模拟Agent卡住不返回",
+        "target": "tool_execution",
+        "trigger_step": 1,
+        "sleep_seconds": 120
+      },
+      "memory_bloat": {
+        "enabled": false,
+        "_comment": "内存暴涨：阶梯式分配大列表，模拟内存泄漏。intensity=light/medium/heavy自动应用预设参数",
+        "target": "tool_execution",
+        "trigger_step": 2,
+        "intensity": "medium"
+      },
+      "repetitive_calls": {
+        "enabled": false,
+        "_comment": "重复调用循环：对同一工具连续N次调用，模拟推理循环/RSM重复调用检测",
+        "target": "decision_loop",
+        "trigger_step": 3,
+        "repeat_count": 4,
+        "target_tool": null
+      }
+    },
+    "credibility_faults": {
+      "wrong_diagnosis": {
+        "enabled": false,
+        "_comment": "诊断结论错误：将正确的fault_code替换为错误的。correct_fault_code为null表示对任何原诊断结果都注入（含NO_FAULT）",
+        "target": "diagnosis_output",
+        "wrong_fault_code": "SA_BRANCH_SHORT",
+        "correct_fault_code": null
+      },
+      "inflated_confidence": {
+        "enabled": false,
+        "_comment": "置信度虚高：错误结论但报高置信度。intensity=light/medium/heavy自动应用预设范围",
+        "target": "diagnosis_output",
+        "intensity": "medium"
+      },
+      "missing_evidence": {
+        "enabled": false,
+        "_comment": "证据缺失：返回结论但supporting_evidence为空",
+        "target": "diagnosis_output"
+      },
+      "contradictory_sensors": {
+        "enabled": false,
+        "_comment": "多源数据矛盾：电压正常但电流为0，DTM矛盾检测规则",
+        "target": "telemetry_source",
+        "intensity": "light",
+        "faulty_sensors": {
+          "bus_current": 0.0
+        }
+      }
+    }
+  },
+  "ground_truth": {
+    "enabled": true,
+    "log_dir": "logs",
+    "log_file": "fault_injection_log.jsonl"
+  },
+  "output": {
+    "schema_version": "1.0",
+    "channels": {
+      "heartbeat": "heartbeat/{sat_id}",
+      "telemetry": "telemetry/{sat_id}",
+      "task_progress": "task_progress/{task_id}",
+      "agent_output": "agent_output/{task_id}",
+      "tool_call": "tool_call/{sat_id}",
+      "tool_result": "tool_result/{sat_id}/{call_id}"
+    }
+  }
+}

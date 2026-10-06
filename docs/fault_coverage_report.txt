@@ -1,0 +1,69 @@
+======================================================================
+故障覆盖率量化报告
+======================================================================
+
+【总览】
+  故障空间子维度总数: 22
+  已覆盖子维度数:   10
+  整体覆盖率:       45.5%
+  已实现故障类型数: 10
+
+【分层覆盖率】
+  稳定性(stability): 5/10 = 50.0%
+  可信性(credibility): 5/12 = 41.7%
+
+【覆盖矩阵】
+  [稳定性]
+    时间域(time):
+      ✓ 执行超时(timeout) -> no_output_timeout
+      ✓ 死循环/活锁(infinite_loop) -> infinite_loop
+      ✗ 无输出/挂起(no_output)
+    资源域(resource):
+      ✓ 内存泄漏(memory_leak) -> memory_bloat
+      ✗ CPU耗尽(cpu_exhaustion)
+      ✗ 文件句柄泄漏(fd_leak)
+    控制流域(control_flow):
+      ✓ 进程崩溃(process_crash) -> process_crash
+      ✗ 异常退出(abnormal_exit)
+      ✓ 重复调用循环(repetitive_calls) -> repetitive_calls
+      ✗ 状态死锁(state_deadlock)
+  [可信性]
+    结论域(conclusion):
+      ✓ 错误诊断结论(wrong_diagnosis) -> wrong_diagnosis
+      ✗ 漏报（有故障报无故障）(false_negative)
+      ✗ 误报（无故障报有故障）(false_positive)
+    置信度域(confidence):
+      ✓ 置信度虚高(inflated_confidence) -> inflated_confidence
+      ✗ 置信度过低(deflated_confidence)
+      ✗ 置信度校准偏差(miscalibration)
+    证据域(evidence):
+      ✓ 证据缺失(missing_evidence) -> missing_evidence
+      ✗ 证据矛盾(contradictory_evidence)
+      ✗ 证据伪造(forged_evidence)
+    数据域(data):
+      ✓ 多源传感器矛盾(contradictory_sensors) -> contradictory_sensors
+      ✓ 数据丢包(packet_loss) -> packet_loss
+      ✗ 数据篡改(data_tampering)
+
+【空白区域】（共 12 项未覆盖）
+  ✗ [稳定性] 时间域 > 无输出/挂起(no_output)
+  ✗ [稳定性] 资源域 > CPU耗尽(cpu_exhaustion)
+  ✗ [稳定性] 资源域 > 文件句柄泄漏(fd_leak)
+  ✗ [稳定性] 控制流域 > 异常退出(abnormal_exit)
+  ✗ [稳定性] 控制流域 > 状态死锁(state_deadlock)
+  ✗ [可信性] 结论域 > 漏报（有故障报无故障）(false_negative)
+  ✗ [可信性] 结论域 > 误报（无故障报有故障）(false_positive)
+  ✗ [可信性] 置信度域 > 置信度过低(deflated_confidence)
+  ✗ [可信性] 置信度域 > 置信度校准偏差(miscalibration)
+  ✗ [可信性] 证据域 > 证据矛盾(contradictory_evidence)
+  ✗ [可信性] 证据域 > 证据伪造(forged_evidence)
+  ✗ [可信性] 数据域 > 数据篡改(data_tampering)
+
+【扩展建议】
+  1. 稳定性-资源域-CPU耗尽：可注入CPU密集型死循环（当前infinite_loop已部分覆盖）
+  2. 稳定性-控制流域-状态死锁：可注入Agent状态机死锁（两个状态互相等待）
+  3. 可信性-结论域-漏报/误报：可注入有故障报无故障、无故障报有故障
+  4. 可信性-证据域-证据矛盾：可注入支持证据与结论互相矛盾
+  5. 可信性-数据域-数据篡改：可注入遥测数据被篡改（哈希校验失败）
+
+======================================================================

@@ -1,0 +1,9 @@
+# 统一换行符与文本编码行为，避免 Windows/Linux 检出时的 CRLF 噪音
+* text=auto
+*.py text eol=lf
+*.md text
+*.json text
+*.yml text eol=lf
+*.yaml text eol=lf
+*.html text
+*.txt text

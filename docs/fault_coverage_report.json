@@ -1,0 +1,309 @@
+{
+  "summary": {
+    "total_subdimensions": 22,
+    "covered_subdimensions": 10,
+    "overall_coverage_rate": 45.5,
+    "total_faults_implemented": 10
+  },
+  "layer_stats": {
+    "stability": {
+      "total": 10,
+      "covered": 5,
+      "coverage_rate": 50.0
+    },
+    "credibility": {
+      "total": 12,
+      "covered": 5,
+      "coverage_rate": 41.7
+    }
+  },
+  "coverage_matrix": {
+    "stability": {
+      "time": {
+        "name": "时间域",
+        "subdimensions": {
+          "timeout": {
+            "name": "执行超时",
+            "covered": true,
+            "fault": "no_output_timeout"
+          },
+          "infinite_loop": {
+            "name": "死循环/活锁",
+            "covered": true,
+            "fault": "infinite_loop"
+          },
+          "no_output": {
+            "name": "无输出/挂起",
+            "covered": false,
+            "fault": null
+          }
+        }
+      },
+      "resource": {
+        "name": "资源域",
+        "subdimensions": {
+          "memory_leak": {
+            "name": "内存泄漏",
+            "covered": true,
+            "fault": "memory_bloat"
+          },
+          "cpu_exhaustion": {
+            "name": "CPU耗尽",
+            "covered": false,
+            "fault": null
+          },
+          "fd_leak": {
+            "name": "文件句柄泄漏",
+            "covered": false,
+            "fault": null
+          }
+        }
+      },
+      "control_flow": {
+        "name": "控制流域",
+        "subdimensions": {
+          "process_crash": {
+            "name": "进程崩溃",
+            "covered": true,
+            "fault": "process_crash"
+          },
+          "abnormal_exit": {
+            "name": "异常退出",
+            "covered": false,
+            "fault": null
+          },
+          "repetitive_calls": {
+            "name": "重复调用循环",
+            "covered": true,
+            "fault": "repetitive_calls"
+          },
+          "state_deadlock": {
+            "name": "状态死锁",
+            "covered": false,
+            "fault": null
+          }
+        }
+      }
+    },
+    "credibility": {
+      "conclusion": {
+        "name": "结论域",
+        "subdimensions": {
+          "wrong_diagnosis": {
+            "name": "错误诊断结论",
+            "covered": true,
+            "fault": "wrong_diagnosis"
+          },
+          "false_negative": {
+            "name": "漏报（有故障报无故障）",
+            "covered": false,
+            "fault": null
+          },
+          "false_positive": {
+            "name": "误报（无故障报有故障）",
+            "covered": false,
+            "fault": null
+          }
+        }
+      },
+      "confidence": {
+        "name": "置信度域",
+        "subdimensions": {
+          "inflated_confidence": {
+            "name": "置信度虚高",
+            "covered": true,
+            "fault": "inflated_confidence"
+          },
+          "deflated_confidence": {
+            "name": "置信度过低",
+            "covered": false,
+            "fault": null
+          },
+          "miscalibration": {
+            "name": "置信度校准偏差",
+            "covered": false,
+            "fault": null
+          }
+        }
+      },
+      "evidence": {
+        "name": "证据域",
+        "subdimensions": {
+          "missing_evidence": {
+            "name": "证据缺失",
+            "covered": true,
+            "fault": "missing_evidence"
+          },
+          "contradictory_evidence": {
+            "name": "证据矛盾",
+            "covered": false,
+            "fault": null
+          },
+          "forged_evidence": {
+            "name": "证据伪造",
+            "covered": false,
+            "fault": null
+          }
+        }
+      },
+      "data": {
+        "name": "数据域",
+        "subdimensions": {
+          "contradictory_sensors": {
+            "name": "多源传感器矛盾",
+            "covered": true,
+            "fault": "contradictory_sensors"
+          },
+          "packet_loss": {
+            "name": "数据丢包",
+            "covered": true,
+            "fault": "packet_loss"
+          },
+          "data_tampering": {
+            "name": "数据篡改",
+            "covered": false,
+            "fault": null
+          }
+        }
+      }
+    }
+  },
+  "gaps": [
+    {
+      "layer": "stability",
+      "dimension": "time",
+      "dimension_name": "时间域",
+      "subdimension": "no_output",
+      "subdimension_name": "无输出/挂起"
+    },
+    {
+      "layer": "stability",
+      "dimension": "resource",
+      "dimension_name": "资源域",
+      "subdimension": "cpu_exhaustion",
+      "subdimension_name": "CPU耗尽"
+    },
+    {
+      "layer": "stability",
+      "dimension": "resource",
+      "dimension_name": "资源域",
+      "subdimension": "fd_leak",
+      "subdimension_name": "文件句柄泄漏"
+    },
+    {
+      "layer": "stability",
+      "dimension": "control_flow",
+      "dimension_name": "控制流域",
+      "subdimension": "abnormal_exit",
+      "subdimension_name": "异常退出"
+    },
+    {
+      "layer": "stability",
+      "dimension": "control_flow",
+      "dimension_name": "控制流域",
+      "subdimension": "state_deadlock",
+      "subdimension_name": "状态死锁"
+    },
+    {
+      "layer": "credibility",
+      "dimension": "conclusion",
+      "dimension_name": "结论域",
+      "subdimension": "false_negative",
+      "subdimension_name": "漏报（有故障报无故障）"
+    },
+    {
+      "layer": "credibility",
+      "dimension": "conclusion",
+      "dimension_name": "结论域",
+      "subdimension": "false_positive",
+      "subdimension_name": "误报（无故障报有故障）"
+    },
+    {
+      "layer": "credibility",
+      "dimension": "confidence",
+      "dimension_name": "置信度域",
+      "subdimension": "deflated_confidence",
+      "subdimension_name": "置信度过低"
+    },
+    {
+      "layer": "credibility",
+      "dimension": "confidence",
+      "dimension_name": "置信度域",
+      "subdimension": "miscalibration",
+      "subdimension_name": "置信度校准偏差"
+    },
+    {
+      "layer": "credibility",
+      "dimension": "evidence",
+      "dimension_name": "证据域",
+      "subdimension": "contradictory_evidence",
+      "subdimension_name": "证据矛盾"
+    },
+    {
+      "layer": "credibility",
+      "dimension": "evidence",
+      "dimension_name": "证据域",
+      "subdimension": "forged_evidence",
+      "subdimension_name": "证据伪造"
+    },
+    {
+      "layer": "credibility",
+      "dimension": "data",
+      "dimension_name": "数据域",
+      "subdimension": "data_tampering",
+      "subdimension_name": "数据篡改"
+    }
+  ],
+  "fault_map": {
+    "infinite_loop": {
+      "layer": "stability",
+      "dimension": "time",
+      "subdimension": "infinite_loop"
+    },
+    "no_output_timeout": {
+      "layer": "stability",
+      "dimension": "time",
+      "subdimension": "timeout"
+    },
+    "memory_bloat": {
+      "layer": "stability",
+      "dimension": "resource",
+      "subdimension": "memory_leak"
+    },
+    "process_crash": {
+      "layer": "stability",
+      "dimension": "control_flow",
+      "subdimension": "process_crash"
+    },
+    "repetitive_calls": {
+      "layer": "stability",
+      "dimension": "control_flow",
+      "subdimension": "repetitive_calls"
+    },
+    "wrong_diagnosis": {
+      "layer": "credibility",
+      "dimension": "conclusion",
+      "subdimension": "wrong_diagnosis"
+    },
+    "inflated_confidence": {
+      "layer": "credibility",
+      "dimension": "confidence",
+      "subdimension": "inflated_confidence"
+    },
+    "missing_evidence": {
+      "layer": "credibility",
+      "dimension": "evidence",
+      "subdimension": "missing_evidence"
+    },
+    "contradictory_sensors": {
+      "layer": "credibility",
+      "dimension": "data",
+      "subdimension": "contradictory_sensors"
+    },
+    "packet_loss": {
+      "layer": "credibility",
+      "dimension": "data",
+      "subdimension": "packet_loss"
+    }
+  }
+}
