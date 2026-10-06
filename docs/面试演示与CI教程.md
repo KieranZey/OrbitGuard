@@ -179,11 +179,29 @@ git push -u origin main
    - `unit-tests`：**4 个矩阵 job**（ubuntu/windows × Python 3.10/3.12）各自跑 8 个测试套件
    - `benchmark`：依赖 unit-tests 全绿后自动跑，产出量化实验报告
 3. 全部变 **绿色勾** = "CI 全绿"达成
-4. benchmark 产物：点进 benchmark job → 底部 **Artifacts** → 下载 `benchmark-report`（含报告 txt/json）
+4. **benchmark 产物（Artifacts）在哪** —— 注意：**在 run 摘要页，不在 job 页面里**，这是最容易找错的地方：
+   - 打开 run 页面：`https://github.com/<用户名>/OrbitGuard/actions/runs/<run_id>`
+   - 顶部 Summary 卡片里有一栏 **Artifacts: 1** —— **点那个数字**就会跳到产物区
+   - 或者直接把 run 页面**滚到最底部**，有独立的 "Artifacts" 区块 → 点 `benchmark-report` 下载 ZIP
+   - ZIP 里是 `benchmark_report.txt` + `benchmark_results.json`
+   - 注意：产物有保留期（本仓库配置 14 天），过期后重新跑一次 CI 即可
+   - 装了 GitHub CLI 的话也可以命令行拉取：`gh run download <run_id> -n benchmark-report`
 
 ### 步骤 4：给 README 挂状态徽章（可选，30 秒）
 
-Actions → 选 OrbitGuard CI workflow → 右上 **⋯ → Create status badge** → 复制 markdown → 粘到 README 顶部 → commit 推送。面试时说"README 上的徽章是真实 CI 状态，不是贴图"。
+Actions → 选 OrbitGuard CI workflow → 右上 **⋯ → Create status badge** → 点 **Copy status badge Markdown**。
+
+粘到 README **第一行标题下方**（空一行），**必须是单行**（弹窗里因宽度看起来折行了，实际是一行）：
+
+```markdown
+# OrbitGuard — 星载Agent全链路可信监护与执行门控框架
+
+[![OrbitGuard CI](https://github.com/<用户名>/OrbitGuard/actions/workflows/tests.yml/badge.svg)](https://github.com/<用户名>/OrbitGuard/actions/workflows/tests.yml)
+```
+
+- 这是**两段式 Markdown**：`[![图片](badge.svg)]` 是徽章图，外面 `(workflow链接)` 是点击跳转，两段都要保留
+- 推上去后徽章立即显示 **passing**（本仓库已验证：SVG 标题为 `OrbitGuard CI - passing`）
+- 面试时说"README 上的徽章是**真实 CI 状态**，点进去就是每次运行的记录"——比贴图有说服力
 
 ### 如果红了怎么办
 
