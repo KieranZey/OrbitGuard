@@ -1,5 +1,7 @@
 # OrbitGuard — 星载Agent全链路可信监护与执行门控框架
 
+[![OrbitGuard CI](https://github.com/KieranZey/OrbitGuard/actions/workflows/tests.yml/badge.svg)](https://github.com/KieranZey/OrbitGuard/actions/workflows/tests.yml)
+
 > 独立设计并实现包含故障注入测试床、运行稳定性监护（RSM）、输出可信度评估（DTM）、汇合判定（Gateway）、执行门控（EGM）的五模块端到端星载Agent可信监护系统。
 
 ## 项目定位
