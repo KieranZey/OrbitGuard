@@ -23,7 +23,7 @@ from typing import Dict, Any, Optional, List
 DEFAULT_CONSTRAINTS = {
     "C1_power": {
         "name": "功率约束",
-        "safety_factor": 0.95,  # 功耗必须小于发电*0.95（遥测比值约0.93，留余量）
+        "safety_factor": 0.95,  # 功耗必须小于发电*0.95（遥测基线比值约0.81，留足余量）
         "description": "power_consumption_w < power_generation_w * safety_factor",
     },
     "C2_thermal": {

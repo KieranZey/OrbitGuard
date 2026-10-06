@@ -122,19 +122,19 @@
   },
   "performance": {
     "agent_execution_ms": {
-      "mean": 501.7,
-      "max": 501.8,
+      "mean": 502.3,
+      "max": 503.5,
       "min": 501.5
     },
     "rsm_dtm_processing_ms": {
-      "mean": 0.2,
-      "max": 0.2
+      "mean": 0.4,
+      "max": 0.7
     },
     "gateway_decision_ms": {
-      "mean": 0.0,
-      "max": 0.0
+      "mean": 0.1,
+      "max": 0.2
     },
-    "total_overhead_ms": 0.2,
+    "total_overhead_ms": 0.5,
     "trials": 5
   }
 }

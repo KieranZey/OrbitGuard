@@ -58,8 +58,10 @@ class TelemetrySource:
             "temp_battery": round(18.0 + random.uniform(-1.0, 1.0), 2),
             "temp_obc": round(25.0 + random.uniform(-1.0, 1.0), 2),
             "temp_sa": round(35.0 + random.uniform(-2.0, 2.0), 2),
-            "power_consumption_w": round(140.0 + random.uniform(-5.0, 5.0), 2),
-            "power_generation_w": round(150.0 + random.uniform(-5.0, 5.0), 2),
+            # P2修复：功耗基线留足裕度——130/160≈0.81，远低于C1安全系数0.95，
+            # 正常场景不再随机触发C1违规（旧基线140/150比值0.93贴线，约1/3帧违规）
+            "power_consumption_w": round(130.0 + random.uniform(-5.0, 5.0), 2),
+            "power_generation_w": round(160.0 + random.uniform(-5.0, 5.0), 2),
             "attitude_error_deg": round(random.uniform(0, 0.5), 4),
             "data_storage_used_mb": round(100 + elapsed * 0.01, 2),
             # Gateway physical_state_snapshot 必须字段（P0）
